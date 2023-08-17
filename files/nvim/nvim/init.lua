@@ -29,37 +29,61 @@ o.softtabstop = 2
 vim.cmd('set number')
 
 -- This is used to view compiled .tex files 
-function RunTex()
-  local fPath = getFPath()
-  local fName = getFName()
-  local dir = getDir()
-  local buildDir = dir .. '/' .. 'compiled_' .. fName
-  local pdfPath = buildDir .. '/' .. fName .. '.pdf'
+Tex = {}
 
-  function mkBuildDirCmd() 
-    return 'mkdir -p ' .. buildDir 
-  end
+function Tex:_getCtx()
+  fName = getFName()
+  fPath = getFPath()
+  curDir = getDir()
+  buildDir = curDir .. '/' .. 'compiled_' .. fName
 
-  function cmpToBuildDirCmd()
-    return 'pdflatex -output-directory=' .. buildDir .. ' ' .. fName 
-  end
-
-  function viewBuiltPdfCmd()
-    return 'zathura ' .. pdfPath
-  end
-
-  function rmBuildDirCmd() 
-    return 'rm -r ' .. buildDir 
-  end
-
-  local THEN = ' && ' 
-  
-  fn.system(
-    mkBuildDirCmd() .. THEN .. 
-    cmpToBuildDirCmd() .. THEN ..
-    viewBuiltPdfCmd() .. THEN ..
-    rmBuildDirCmd() 
-  )
+  return {
+    fPath = fPath,
+    fName = fName,
+    curDir = curDir,
+    buildDir = buildDir 
+  }   
 end
 
-vim.cmd('command! -nargs=0 RunTex :lua RunTex()')
+function Tex:_getCmpCmd()
+  local ctx = Tex:_getCtx()
+
+  mkDir = 'mkdir -p ' .. ctx.buildDir 
+  cmpToDir = 'pdflatex -output-directory=' .. ctx.buildDir .. ' ' .. ctx.fName
+
+  return mkDir .. ' && ' .. cmpToDir
+end
+
+function Tex:_getViewCmd()
+  local ctx = Tex:_getCtx()
+  local pdfPath = ctx.buildDir .. '/' .. ctx.fName .. '.pdf'
+  
+  return 'zathura ' .. pdfPath
+end
+
+function Tex:_getCleanCmd()
+  local ctx = Tex:_getCtx()
+  return 'rm -r ' .. ctx.buildDir
+end
+
+function Tex:Run(cmd)
+  local cmp = Tex:_getCmpCmd()
+  local view = Tex:_getViewCmd()
+  local clean = Tex:_getCleanCmd()
+  local THEN = ' && '
+
+  if cmd == 'cmp' then
+    fn.system(cmp)
+  elseif cmd == 'view' then
+    fn.system(view)
+  elseif cmd == 'clean' then
+    fn.system(clean)
+  elseif cmd == nil then
+    fn.system(cmp .. THEN .. view .. THEN .. clean)
+  end
+end
+
+vim.cmd('command! -nargs=0 Tex :lua Tex:Run()')
+vim.cmd('command! -nargs=0 TexCmp :lua Tex:Run("cmp")')
+vim.cmd('command! -nargs=0 TexView :lua Tex:Run("view")')
+vim.cmd('command! -nargs=0 TexClean :lua Tex:Run("clean")')
