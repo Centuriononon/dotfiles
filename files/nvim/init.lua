@@ -87,7 +87,6 @@ function VimEvents.pub(group, event)
   if registry[group] and registry[group][event] then 
     local cb_list = registry[group][event]
    
-    Log.log_table(cb_list)
     for i = 1, #cb_list do
       cb_list[i]() 
     end
@@ -170,12 +169,8 @@ function Commander.run_in_bg(commands, run_handler, end_handler)
     local is_end = cmd_id > #commands
 
     if is_end then
-      log_table(commands)
-
       if end_handler then end_handler() end
     else
-      log_table(commands)
-      
       job_id = run_cmd(exit_handler)
     end
   end
