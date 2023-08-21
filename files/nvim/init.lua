@@ -325,7 +325,6 @@ function TexObserver:disable_clean_on_exit()
   end
 end
 
-
 -- TexSessions
 TexSessions = {}
 
@@ -349,9 +348,7 @@ function TexSessions:compile_view_clean()
     local view_cmd = TexHelper.get_view_cmd(ctx.pdf_path)
 
     local run_handler = function(_cmd_id, id)
-      self.sessions[ctx.fpath] = {
-	view_id = id 
-      } 
+      self.sessions[ctx.fpath] = { view_id = id } 
     end
 
     local end_handler = function()
