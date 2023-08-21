@@ -87,6 +87,7 @@ alias power="powerprofilesctl get"
 # Helpers
 alias polybar_start='fork "~/.config/polybar/launch.sh --${_polybar}"'
 alias set_headset='pacmd set-source-port alsa_input.pci-0000_00_1f.3.analog-stereo analog-input-headset-mic'
+alias plug_hdmi='xrandr --output eDP-1 --primary --mode 1920x1080 --pos 0x0 --rotate normal --output HDMI-1 --mode 1920x1080 --pos 0x0 --rotate normal --right-of eDP-1 && pactl set-card-profile alsa_card.pci-0000_00_1f.3 output:hdmi-stereo'
 
 # Resolution
 alias scale_1="xrandr --output eDP-1 --mode 1920x1080 --scale 1x1"
