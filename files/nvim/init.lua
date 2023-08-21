@@ -6,6 +6,7 @@ require("plugins")
 local o = vim.o
 local fn = vim.fn
 local g = vim.g
+local api = vim.api
 
 -- j+k to switch to visual mode
 vim.api.nvim_set_keymap('i', 'jk', '<Esc>', { noremap = true })
@@ -34,10 +35,35 @@ vim.g.vimtex_view_method = "zathura"
 vim.g.latex_view_general_viewer = "zathura"
 
 -- Helpers
-function log_table(table) 
+
+
+-- Log
+Log = {}
+
+function Log:log_table(table) 
   for key, value in pairs(table) do
     print(key, ":", value) 
   end
+end
+
+-- FileSave 
+FileSave = {}
+
+function FileSave:register(group, fn)
+  vim.api.nvim_exec(
+    "augroup " .. group .. " " 
+    .. "autocmd! " 
+    .. "autocmd BufWritePost * lua " .. fn .. " "
+    .. "augroup END", 
+    false
+  )
+end
+
+function FileSave:deregister(group) 
+  vim.api.nvim_exec(
+    [[augroup ]] .. group .. [[ autocmd! augroup END]], 
+    false
+  ) 
 end
 
 -- Custom Texer
@@ -47,7 +73,6 @@ function Tex:_run_commands_in_bg(commands, run_handler, end_handler)
   local cmd_id = 1
   
   local function run_cmd(cb)
-    print("Running command in bg:", commands[cmd_id])
     return fn.jobstart(commands[cmd_id], {on_exit = cb})
   end
 
@@ -56,12 +81,10 @@ function Tex:_run_commands_in_bg(commands, run_handler, end_handler)
     local is_end = cmd_id > #commands
 
     if is_end then
-      print("It is end, cmd_id:", cmd_id, "commands:")
       log_table(commands)
 
       if end_handler then end_handler() end
     else
-      print("It is not end, cmd_id:", cmd_id, "commands:")
       log_table(commands)
       
       job_id = run_cmd(exit_handler)
@@ -69,9 +92,10 @@ function Tex:_run_commands_in_bg(commands, run_handler, end_handler)
   end
 
   local function run_commands()
-    print("Running command in bg:", commands[cmd_id])
+    job_id = fn.jobstart(commands[cmd_id], {on_exit = exit_handler})
     if run_handler then run_handler(cmd_id, job_id) end
-    return fn.jobstart(commands[cmd_id], {on_exit = exit_handler})
+
+    return job_id
   end
   
   return run_commands() 
@@ -90,7 +114,6 @@ function Tex:_run_commands(...)
     row = row .. ' && ' .. commands[i] 
   end
 
-  print("Executing command:", row)
   return fn.system(row)
 end
 
@@ -110,11 +133,17 @@ function Tex:_get_clean_command(output)
   return 'rm -r ' .. output
 end
 
-function Tex:get_executor()
-  local sessions = {} 
+function Tex:new()
+  local state = {
+    sessions = {}
+  }
+  setmetatable(state, self)
+  self.__index = self
 
-  return function(run) 
-    -- Contextual vars 
+  return state
+end
+
+function Tex:_get_context()
     local fname = fn.expand('%:r')
     local tex_file = fname .. '.tex'
     local fpath = fn.fnameescape(vim.fn.expand('%:p'))
@@ -122,46 +151,84 @@ function Tex:get_executor()
     local cmp_dir = curr_dir .. '/' .. 'compiled_' .. fname
     local pdf_path = cmp_dir .. '/' .. fname .. '.pdf'
 
-    -- Commands
-    local mk_cmp_dir = Tex:_get_make_compile_dir_command(cmp_dir) 
-    local cmp = Tex:_get_compile_command(tex_file, cmp_dir)
-    local view = Tex:_get_view_command(pdf_path)
-    local clean = Tex:_get_clean_command(cmp_dir)
-   
-    if run == 'compile' then
-      Tex:_run_commands(mk_cmp_dir, cmp)	
-    elseif run == 'view' then
-      Tex:_run_commands_in_bg({view})
-    elseif run == 'clean' then
-      Tex:_run_commands(clean)
-    elseif run == 'flow' then
-      Tex:_run_commands(mk_cmp_dir, cmp)	
-      local is_new_session = sessions[fpath] == nil
-      
-      if is_new_session then
-	print("It is new session")
+    return {
+      fname = fname,
+      tex_file = tex_file,
+      fpath = fpath,
+      curr_dir = curr_dir,
+      cmp_dir = cmp_dir,
+      pdf_path = pdf_path
+    }
+end
 
-	local run_handler = function()
-	  print("Session is initiated, viewer started")
+function Tex:compile()
+  local ctx = Tex:_get_context()
 
-	  sessions[fpath] = true 
-	end
+  local mk_cmp_dir = Tex:_get_make_compile_dir_command(ctx.cmp_dir) 
+  local cmp = Tex:_get_compile_command(ctx.tex_file, ctx.cmp_dir)
+  
+  Tex:_run_commands(mk_cmp_dir, cmp)	
+end
 
-	local end_handler = function()
-	  print("Session is removed, viewer ended")
-	  Tex:_run_commands(clean) 
-	  sessions[fpath] = nil
-	end
+function Tex:view()
+  local ctx = Tex:_get_context()
+  
+  local view = Tex:_get_view_command(ctx.pdf_path)
 
-	Tex:_run_commands_in_bg({view}, run_handler, end_handler)
-      end
+  Tex:_run_commands_in_bg({view})
+end
+
+function Tex:clean()
+  local ctx = Tex:_get_context()
+
+  local clean = Tex:_get_clean_command(ctx.cmp_dir)
+  
+  Tex:_run_commands(clean)
+end
+
+function Tex:flow()
+  local ctx = Tex:_get_context()
+
+  Tex:compile()	
+  
+  local is_new = self.sessions[ctx.fpath] == nil
+  
+  if is_new then
+    local view = Tex:_get_view_command(ctx.pdf_path)
+
+    local run_handler = function(_cmd_id, job_id)
+      self.sessions[ctx.fpath] = {
+	view_job_id = job_id 
+      } 
     end
+
+    local end_handler = function()
+      Tex:clean()
+      self.sessions[fpath] = nil
+    end
+    
+    Tex:_run_commands_in_bg({view}, run_handler, end_handler)
   end
 end
 
-tex = Tex:get_executor()
+function Tex:stop_flow()
+  local ctx = Tex:_get_context()
+  
+  if self.sessions[ctx.fpath] then
+    view_job_id = self.sessions[ctx.fpath].view_job_id 
 
-vim.cmd('command! -nargs=0 Tex :lua tex("flow")')
-vim.cmd('command! -nargs=0 TexCompile :lua tex("compile")')
-vim.cmd('command! -nargs=0 TexView :lua tex("view")')
-vim.cmd('command! -nargs=0 TexClean :lua tex("clean")')
+    fn.jobstop(view_job_id)
+
+    self.sessions[ctx.fpath] = nil
+  end
+
+  Tex:clean() 
+end
+
+tex = Tex:new()
+
+vim.cmd('command! -nargs=0 TexFlow :lua tex:flow()')
+vim.cmd('command! -nargs=0 TexStop :lua tex:stop_flow()')
+vim.cmd('command! -nargs=0 TexCompile :lua tex:compile()')
+vim.cmd('command! -nargs=0 TexView :lua tex:view()')
+vim.cmd('command! -nargs=0 TexClean :lua tex:clean()')
