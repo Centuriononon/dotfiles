@@ -284,7 +284,7 @@ function TexObserver:new()
   return state
 end
 
-function TexObserver:is_on(key)
+function TexObserver:_is_on(key)
   local ctx = TexHelper.get_ctx()
   return self[ctx.fpath] and self[ctx.fpath][key]
 end
@@ -292,7 +292,7 @@ end
 function TexObserver:enable_compile_on_save()
   local ctx = TexHelper.get_ctx()
  
-  if not self:is_on("compile_on_save") then
+  if not self:_is_on("compile_on_save") then
     FileSaveEvent:sub(ctx.fpath, function() Tex.compile() end)
     self[ctx.fpath] = { compile_on_save = true }
   end
@@ -301,7 +301,7 @@ end
 function TexObserver:disable_compile_on_save()
   local ctx = TexHelper.get_ctx()
 
-  if self:is_on("compile_on_save") then
+  if self:_is_on("compile_on_save") then
     FileSaveEvent:unsub(ctx.fpath)
     self[ctx.fpath].compile_on_save = nil 
   end
@@ -310,7 +310,7 @@ end
 function TexObserver:enable_clean_on_exit()
   local ctx = TexHelper.get_ctx()
   
-  if not self:is_on("clean_on_exit") then
+  if not self:_is_on("clean_on_exit") then
     ExitEvent:sub(ctx.fpath, function() Tex.clean() end) 
     self[ctx.fpath] = { clean_on_exit = true }
   end
@@ -319,7 +319,7 @@ end
 function TexObserver:disable_clean_on_exit()
   local ctx = TexHelper.get_ctx()
   
-  if self:is_on("clean_on_exit") then
+  if self:_is_on("clean_on_exit") then
     ExitEvent:unsub(ctx.fpath) 
     self[ctx.fpath].clean_on_exit = nil 
   end
