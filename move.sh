@@ -11,13 +11,14 @@ user_dir="/home/$user"
 workdir="$user_dir/dotfiles"
 files="$workdir/files"
 
-config_names=("polybar" "zsh" "sxhkd" "bspwm" "nvim")
+config_names=("polybar" "zsh" "sxhkd" "bspwm" "nvim" "picom")
 
 polybar_sources=("$user_dir/.config/polybar/hack")
 zsh_sources=("$user_dir/.config/zsh/.zshrc")
 sxhkd_sources=("$user_dir/.config/sxhkd/sxhkdrc")
 bspwm_sources=("$user_dir/.config/bspwm/bspwmrc")
 nvim_sources=("$user_dir/.config/nvim/init.lua")
+picom_sources=("$user_dir/.config/picom")
 
 rm -r "$files"
 mkdir "$files"
