@@ -3,27 +3,16 @@
 # Autostart
 pgrep -x sxhkd > /dev/null || sxhkd &
 zsh -ic "polybar_start" &
-zsh -ic "comfortable-swipe start" &
+comfortable-swipe start &
+bluetoothctl power on &
 
-# Dual Monitors
-# if [[ $(xrandr -q | grep 'HDMI-1 connected') ]]; then
-#	xrandr \
-#		# The primary monitor
-#		--output eDP-1 \
-#		--primary \
-#		--mode 1920x1080 \
-#		--rotate normal \
-#		# The second one
-#		--output HDMI-1 \
-#		--mode 1920x1080 \
-#		--rotate normal \
-#		--right-of eDP-1
-
-# Enabling headset for headphones
-zsh -ic "set_headset" &
+# Monitors
+xrandr --addmode HDMI-1 1920x1080
+xrandr --addmode eDP-1 1920x1080
+xrandr --addmode HDMI-1 1680x1050
 
 # Wallpaper
-feh --bg-fill ~/Documents/Assets/Backgrounds/COSMOS_YELLOW.jpg &
+feh --bg-fill /home/Centurion/Documents/Assets/Backgrounds/COSMOS_YELLOW.jpg &
 
 # Workspaces
 bspc monitor eDP-1 -d I II III IV V VI VII VIII IX X 
@@ -31,8 +20,7 @@ bspc monitor eDP-1 -d I II III IV V VI VII VIII IX X
 # Others
 bspc config pointer_follows_focus true
 bspc config border_width         2
-bspc config window_gap           12
+bspc config window_gap           8
 bspc config split_ratio          0.52
 bspc config borderless_monocle   true
 bspc config gapless_monocle      true
-

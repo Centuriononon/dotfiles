@@ -1,6 +1,10 @@
 #================> Oh-my-zsh
-# Path to your oh-my-zsh installation.
+# Path to your oh-my-zsh installation. 
 export ZSH="$HOME/.config/zsh/ohmyzsh"
+
+#================> Exports
+# export BROWSER="/var/lib/flatpak/app/com.brave.Browser/x86_64/stable/active/files/brave" 
+export BROWSER="com.brave.Browser.desktop" 
 
 #================> Settings
 # "minimal" is dark
@@ -77,6 +81,7 @@ alias bspwm_cfg="${_editor} ~/.config/bspwm/bspwmrc"
 alias sxhkd_cfg="${_editor} ~/.config/sxhkd/sxhkdrc"
 alias polybar_cfg="${_editor} ~/.config/polybar/${_polybar}/config.ini"
 alias picom_cfg="${_editor} ~/.config/picom/picom.conf"
+alias zathura_cfg="${_editor} ~/.config/zathura/zathurarc"
 
 # Power Profiles
 alias power_l="powerprofilesctl set power-saver"
@@ -86,8 +91,10 @@ alias power="powerprofilesctl get"
 
 # Helpers
 alias polybar_start='fork "~/.config/polybar/launch.sh --${_polybar}"'
-alias set_headset='pacmd set-source-port alsa_input.pci-0000_00_1f.3.analog-stereo analog-input-headset-mic'
-alias plug_hdmi='xrandr --output eDP-1 --primary --mode 1920x1080 --pos 0x0 --rotate normal --output HDMI-1 --mode 1920x1080 --pos 0x0 --rotate normal --right-of eDP-1 && pactl set-card-profile alsa_card.pci-0000_00_1f.3 output:hdmi-stereo'
+alias plug_hdmi='xrandr --output eDP-1 --primary --mode 1920x1080 --pos 0x0 --rotate normal --output HDMI-1 --mode 1920x1080 --pos 0x0 --rotate normal --right-of eDP-1'
+alias switch_hdmi='xrandr --output eDP-1 --off --output HDMI-1 --mode 1920x1080 --pos 0x0 --rotate normal eDP-1'
+alias plug_hdmi1610='xrandr --output eDP-1 --primary --mode 1920x1080 --pos 0x0 --rotate normal --output HDMI-1 --mode 1680x1050 --pos 0x0 --rotate normal --right-of eDP-1'
+alias unplug_hdmi='xrandr --output HDMI-1 --off'
 
 # Resolution
 alias scale_1="xrandr --output eDP-1 --mode 1920x1080 --scale 1x1"
@@ -111,6 +118,15 @@ alias brave='fork "flatpak run com.brave.Browser"'
 alias obsidian='fork "flatpak run md.obsidian.Obsidian"'
 alias discord='fork "flatpak run com.discordapp.Discord --no-sandbox"'
 alias postman='fork "flatpak run com.getpostman.Postman"'
+alias insomnia='fork "flatpak run rest.insomnia.Insomnia"'
+alias steam='fork "flatpak run com.valvesoftware.Steam"'
+alias parsec='fork "flatpak run com.parsecgaming.parsec"'
+alias chrome='fork "flatpak run com.google.Chrome"'
+alias vivaldi='fork "vivaldi"'
+
+# Bluetooth
+alias conn_jbl="bluetoothctl connect 68:59:32:01:38:A6"
+alias conn_keyboard="bluetoothctl connect EA:6E:5C:75:A7:67"
 
 #==============> Start
 # Hello text

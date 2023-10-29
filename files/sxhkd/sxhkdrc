@@ -188,7 +188,7 @@ alt + n
 
 # Mute Sound
 XF86AudioMute
-	amixer -D pulse sset Master toggle
+	amixer -D pulse set Master toggle
 
 # Make sound lower
 XF86AudioLowerVolume
@@ -200,7 +200,7 @@ XF86AudioRaiseVolume
 
 # Mute Microphone
 XF86AudioMicMute
-	amixer -D pulse sset Capture toggle
+	amixer set Capture toggle
 
 # Make brightness more
 XF86MonBrightnessUp

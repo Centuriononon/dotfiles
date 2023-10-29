@@ -1,7 +1,3 @@
--- Import
-require("settings")
-require("plugins")
-
 -- Aliases
 local o = vim.o
 local fn = vim.fn
@@ -347,8 +343,9 @@ function TexSessions:compile_view_clean()
     end
 
     local end_handler = function()
-      Tex.clean()
-      self.sessions[ctx.fpath] = nil
+      -- I don't want to clean yet.
+      -- Tex.clean()
+      -- self.sessions[ctx.fpath] = nil
     end
     
     Commander.run_in_bg({view_cmd}, run_handler, end_handler)
