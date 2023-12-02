@@ -36,9 +36,11 @@ require("lazy").setup({
 	{ "williamboman/mason.nvim" },
 	-- Autopairs
 	{ "windwp/nvim-autopairs" },
-	-- Comments
+	-- Comment
 	{ "terrortylor/nvim-comment" },
 	-- Git Signs 
 	{ "lewis6991/gitsigns.nvim" },
+	-- Themes
+	{ "catppuccin/nvim", name = "catppuccin", priority = 1000 }
 })
 
