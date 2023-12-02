@@ -123,6 +123,7 @@ alias steam='fork "flatpak run com.valvesoftware.Steam"'
 alias parsec='fork "flatpak run com.parsecgaming.parsec"'
 alias chrome='fork "flatpak run com.google.Chrome"'
 alias vivaldi='fork "vivaldi"'
+alias sublime='fork "flatpak run com.sublimetext.three"'
 
 # Bluetooth
 alias conn_jbl="bluetoothctl connect 68:59:32:01:38:A6"

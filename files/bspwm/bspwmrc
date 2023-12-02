@@ -12,7 +12,7 @@ xrandr --addmode eDP-1 1920x1080
 xrandr --addmode HDMI-1 1680x1050
 
 # Wallpaper
-feh --bg-fill /home/Centurion/Documents/Assets/Backgrounds/COSMOS_YELLOW.jpg &
+feh --bg-fill /home/Centurion/Documents/Assets/Backgrounds/COSMOS_YELLOW_DARK.jpg &
 
 # Workspaces
 bspc monitor eDP-1 -d I II III IV V VI VII VIII IX X 
