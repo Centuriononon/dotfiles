@@ -117,13 +117,9 @@ alias telegram='fork "flatpak run org.telegram.desktop"'
 alias brave='fork "flatpak run com.brave.Browser"'
 alias obsidian='fork "flatpak run md.obsidian.Obsidian"'
 alias discord='fork "flatpak run com.discordapp.Discord --no-sandbox"'
-alias postman='fork "flatpak run com.getpostman.Postman"'
-alias insomnia='fork "flatpak run rest.insomnia.Insomnia"'
 alias steam='fork "flatpak run com.valvesoftware.Steam"'
-alias parsec='fork "flatpak run com.parsecgaming.parsec"'
-alias chrome='fork "flatpak run com.google.Chrome"'
-alias vivaldi='fork "vivaldi"'
-alias sublime='fork "flatpak run com.sublimetext.three"'
+alias httpie-app='fork "/home/Centurion/Documents/Soft/HTTPie-2023.3.6.AppImage"'
+alias bruno='fork "bruno"'
 
 # Bluetooth
 alias conn_jbl="bluetoothctl connect 68:59:32:01:38:A6"

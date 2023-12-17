@@ -1,3 +1,3 @@
 local lspconfig = require("lspconfig")
-lspconfig.elixirls.setup {}
-lspconfig.tsserver.setup {}
+lspconfig.elixirls.setup({})
+lspconfig.tsserver.setup({})

@@ -21,26 +21,45 @@ require("lazy").setup({
       "nvim-tree/nvim-web-devicons",
       "MunifTanjim/nui.nvim",
     }
-  },
+  }
   -- Syntax Highlight
-	{ "nvim-treesitter/nvim-treesitter" },
+	, { "nvim-treesitter/nvim-treesitter" }
 	-- LSP
-	{ "neovim/nvim-lspconfig" },
+	, { "neovim/nvim-lspconfig" }
   -- Auto Complete
-  { "hrsh7th/nvim-cmp" },
-  { "hrsh7th/cmp-nvim-lsp" },
-  { "hrsh7th/cmp-buffer" },
-  { "hrsh7th/cmp-path" },
-  { "hrsh7th/cmp-cmdline" },
+  , { "hrsh7th/nvim-cmp" }
+  , { "hrsh7th/cmp-nvim-lsp" }
+  , { "hrsh7th/cmp-buffer" }
+  , { "hrsh7th/cmp-path" }
+  , { "hrsh7th/cmp-cmdline" }
 	-- Manager for LSPs
-	{ "williamboman/mason.nvim" },
+	, { "williamboman/mason.nvim" }
 	-- Autopairs
-	{ "windwp/nvim-autopairs" },
+	, { "windwp/nvim-autopairs" }
 	-- Comment
-	{ "terrortylor/nvim-comment" },
+	, { "terrortylor/nvim-comment" }
 	-- Git Signs 
-	{ "lewis6991/gitsigns.nvim" },
+	, { "lewis6991/gitsigns.nvim" }
 	-- Themes
-	{ "catppuccin/nvim", name = "catppuccin", priority = 1000 }
+	, { "catppuccin/nvim", name = "catppuccin", priority = 1000 }
+	-- Telescope
+	, { 
+		"nvim-telescope/telescope.nvim", tag = "0.1.5",
+		dependencies = { "nvim-lua/plenary.nvim" }
+	}
+	-- VimTex
+	, {
+    "lervag/vimtex",
+    init = function()
+			local g = vim.g
+			g.vimtex_view_method = "zathura"
+			g.vimtex_compiler_method = "latexmk"
+			g.vimtex_compiler_latexmk = {
+				out_dir = "dist"
+			}
+    end,
+		ft = "tex",
+    lazy = false,
+  },
 })
 
