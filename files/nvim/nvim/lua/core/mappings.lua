@@ -1,13 +1,22 @@
 vim.g.mapleader = " "
 
+--
 -- Visual mode switch
+--
+
 vim.api.nvim_set_keymap("i", "jk", "<Esc>", { noremap = true })
 
+--
 -- NeoTree
+--
+
 vim.keymap.set("n", "<leader><space>", ":Neotree focus<CR>")
 vim.keymap.set("n", "<leader>o", ":Neotree float git_status<CR>")
 
+--
 -- LSP Config 
+--
+
 -- Global mappings.
 -- See `:help vim.diagnostic.*` for documentation on any of the below functions
 vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float)
@@ -46,7 +55,10 @@ vim.api.nvim_create_autocmd("LspAttach", {
   end,
 })
 
+--
 -- Telescope
+-- 
+
 local builtin = require("telescope.builtin")
 vim.keymap.set("n", "<leader>ff", builtin.find_files, {})
 vim.keymap.set("n", "<leader>fg", builtin.live_grep, {})

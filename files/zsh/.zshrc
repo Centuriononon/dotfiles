@@ -91,10 +91,9 @@ alias power="powerprofilesctl get"
 
 # Helpers
 alias polybar_start='fork "~/.config/polybar/launch.sh --${_polybar}"'
-alias plug_hdmi='xrandr --output eDP-1 --primary --mode 1920x1080 --pos 0x0 --rotate normal --output HDMI-1 --mode 1920x1080 --pos 0x0 --rotate normal --right-of eDP-1'
 alias switch_hdmi='xrandr --output eDP-1 --off --output HDMI-1 --mode 1920x1080 --pos 0x0 --rotate normal eDP-1'
-alias plug_hdmi1610='xrandr --output eDP-1 --primary --mode 1920x1080 --pos 0x0 --rotate normal --output HDMI-1 --mode 1680x1050 --pos 0x0 --rotate normal --right-of eDP-1'
-alias unplug_hdmi='xrandr --output HDMI-1 --off'
+alias plug_hdmi='xrandr --output HDMI-2 --auto --right-of eDP1'
+alias unplug_hdmi='xrandr --output HDMI-2 --off'
 
 # Resolution
 alias scale_1="xrandr --output eDP-1 --mode 1920x1080 --scale 1x1"
@@ -120,6 +119,7 @@ alias discord='fork "flatpak run com.discordapp.Discord --no-sandbox"'
 alias steam='fork "flatpak run com.valvesoftware.Steam"'
 alias httpie-app='fork "/home/Centurion/Documents/Soft/HTTPie-2023.3.6.AppImage"'
 alias bruno='fork "bruno"'
+alias whatsapp='fork "flatpak run com.github.eneshecan.WhatsAppForLinux"'
 
 # Bluetooth
 alias conn_jbl="bluetoothctl connect 68:59:32:01:38:A6"

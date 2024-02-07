@@ -4,12 +4,19 @@ require("nvim-treesitter.configs").setup({
     "lua", 
     "javascript", 
     "elixir", 
+		"heex",
     "bash", 
     "make", 
     "markdown", 
     "dockerfile",
-    "latex"
+		"latex"
   },
+	ensure_installed = {
+		"typescript", 
+		"javascript", 
+		"elixir", 
+		"heex"
+	},
   sync_install = false,
   auto_install = true,
   highlight = {
